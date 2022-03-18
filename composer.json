@@ -1,0 +1,46 @@
+{
+    "name": "aoeng/laravel-web3",
+    "description": "eth bsc web3 api",
+    "keywords": [
+        "eth",
+        "bsc",
+        "web3",
+        "etherscan",
+        "laravel"
+    ],
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Dang",
+            "email": "yofengge@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=7.4",
+        "laravel/framework": "^8.0|^9.0",
+        "kornrunner/keccak": "~1.0",
+        "web3p/ethereum-tx": "^0.4.3"
+    },
+    "autoload": {
+        "psr-4": {
+            "Aoeng\\Laravel\\Web3\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Aoeng\\Laravel\\Web3\\": "tests/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Aoeng\\Laravel\\Web3\\Web3ServiceProvider"
+            ],
+            "aliases": {
+                "Web3": "Aoeng\\Laravel\\Web3\\Facades\\Web3",
+                "Eth": "Aoeng\\Laravel\\Web3\\Facades\\Eth",
+                "Contract": "Aoeng\\Laravel\\Web3\\Facades\\Contract"
+            }
+        }
+    }
+}
