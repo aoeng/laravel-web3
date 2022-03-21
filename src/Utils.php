@@ -14,9 +14,8 @@ namespace Aoeng\Laravel\Web3;
 use Exception;
 use Illuminate\Support\Str;
 use kornrunner\Keccak;
-use phpseclib3\Math\BigInteger;
 use InvalidArgumentException;
-use stdClass;
+use phpseclib\Math\BigInteger;
 
 
 class Utils
@@ -80,13 +79,15 @@ class Utils
 
     public static function toHex($value, int $decimal = 0, bool $prefix = true)
     {
-
         if (is_numeric($value)) {
             $bn = self::toBn($value * pow(10, $decimal));
             $hex = preg_replace('/^0+(?!$)/', '', $bn->toHex(true));
         } else if (is_string($value)) {
-            $hex = self::stripZero($value);
-//            $hex = implode('', unpack('H*', $value));
+            if (self::isHex($value)) {
+                $hex = self::stripZero($value);
+            } else {
+                $hex = implode('', unpack('H*', $value));
+            }
         } else {
             throw new InvalidArgumentException('The value to toHex function is not support.');
         }
