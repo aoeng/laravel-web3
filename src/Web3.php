@@ -74,6 +74,15 @@ class Web3
         return $response;
     }
 
+    public function blockNumber()
+    {
+        $response = $this->requestRPC('eth_blockNumber');
+
+        if ($response instanceof \Exception) throw $response;
+
+        return Utils::fromHex($response);
+    }
+
     public function getBlockByNumber($number, $full = true)
     {
         $response = $this->requestRPC('eth_getBlockByNumber', [Utils::toHex($number), $full]);
