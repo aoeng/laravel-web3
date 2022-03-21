@@ -135,7 +135,6 @@ class Web3
     public function requestRPC($method, $params = [])
     {
         try {
-            info('RPC:' . $method, [$this->config['rpc_host'], $params]);
             $response = Http::asJson()->post($this->config['rpc_host'], [
                 "jsonrpc" => "2.0",
                 "id"      => 1,
@@ -143,7 +142,6 @@ class Web3
                 "params"  => $params
             ])->throw()->json();
 
-            info('$response', $response);
             if (isset($response['error'])) {
                 throw new \Exception($response['error']['message'], $response['error']['code']);
             }
