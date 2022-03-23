@@ -59,7 +59,7 @@ class Eth extends Web3
 
         if ($response instanceof \Exception) throw $response;
 
-        return Utils::fromHex($response);
+        return Utils::fromHex($response, $decimal);
     }
 
     public function transaction($from, $to, $value, $gas = null, $gasPrice = null, $nonce = null)
