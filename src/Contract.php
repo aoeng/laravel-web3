@@ -251,7 +251,7 @@ class Contract extends Web3
         $transaction = [
             'nonce'    => $nonce ? Utils::toHex($nonce) : $this->getTransactionCount(),
             'gas'      => Utils::toHex($gas ?? $this->config['gas_limit']),
-            'gasPrice' => Utils::toHex($gasPrice ?? $this->config['gas_price'], 9),
+            'gasPrice' => Utils::toHex($gasPrice ?? $this->config['gas_price']),
             'from'     => $this->address,
             'to'       => $this->contractAddress,
             'chainId'  => $this->config['chain_id']
