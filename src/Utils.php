@@ -68,8 +68,8 @@ class Utils
                 }
 
                 $transaction['transfers'][] = [
-                    'from'  => mb_substr($log['topics'][1], 26),
-                    'to'    => mb_substr($log['topics'][2], 26),
+                    'from'  => '0x' . mb_substr($log['topics'][1], 26),
+                    'to'    => '0x' . mb_substr($log['topics'][2], 26),
                     'value' => self::fromHex($log['data']),
                 ];
             }
