@@ -66,11 +66,12 @@ class Utils
                 if (!isset($log['topics']) || $log['topics'][0] != '0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef') {
                     continue;
                 }
-                $from = mb_substr($log['topics'][1], 26);
-                $to = mb_substr($log['topics'][2], 26);
-                $value = self::fromHex($log['data']);
 
-                $transaction['transfers'][$to] = compact('from', 'to', 'value');
+                $transaction['transfers'][] = [
+                    'from'  => mb_substr($log['topics'][1], 26),
+                    'to'    => mb_substr($log['topics'][2], 26),
+                    'value' => self::fromHex($log['data']),
+                ];
             }
         }
 
