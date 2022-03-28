@@ -159,6 +159,13 @@ class Utils
     }
 
 
+    public static function integerFormat($value)
+    {
+        $hex = Utils::toBn($value)->toHex(true);
+
+        return Str::padLeft($hex, 64, Str::startsWith($hex, 'f') ? 'f' : '0');
+    }
+
     /**
      * toBn
      * Change number or number string to bignumber.

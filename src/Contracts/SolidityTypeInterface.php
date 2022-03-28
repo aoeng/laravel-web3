@@ -25,7 +25,7 @@ interface SolidityTypeInterface
      *
      * @return string
      */
-    public function inputFormat();
+    public function inputFormat($value);
 
     public function outputFormat();
 }

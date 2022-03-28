@@ -4,7 +4,6 @@ namespace Aoeng\Laravel\Web3\Types;
 
 use Aoeng\Laravel\Web3\Contracts\SolidityTypeInterface;
 use Aoeng\Laravel\Web3\Utils;
-use phpseclib3\Math\BigInteger;
 
 class IntegerType extends Type implements SolidityTypeInterface
 {
@@ -14,9 +13,9 @@ class IntegerType extends Type implements SolidityTypeInterface
      *
      * @return string
      */
-    public function inputFormat()
+    public function inputFormat($value)
     {
-        return $this->integerFormat($this->value);
+        return Utils::integerFormat($value);
     }
 
     /**

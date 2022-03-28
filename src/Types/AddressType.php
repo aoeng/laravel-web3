@@ -17,18 +17,9 @@ class AddressType extends Type implements SolidityTypeInterface
      * @return string
      * @throws \Exception
      */
-    public function inputFormat()
+    public function inputFormat($value)
     {
-        $value = $this->value;
-        if (Utils::isAddress($value)) {
-            $value = mb_strtolower($this->value);
-
-            if (Utils::isZeroPrefixed($value)) {
-                $value = Utils::stripZero($value);
-            }
-        }
-
-        return $this->integerFormat($value);
+        return Utils::integerFormat(Utils::stripZero(mb_strtolower($value)));
     }
 
 

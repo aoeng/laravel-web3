@@ -3,6 +3,7 @@
 namespace Aoeng\Laravel\Web3\Types;
 
 use Aoeng\Laravel\Web3\Contracts\SolidityTypeInterface;
+use Illuminate\Support\Str;
 use InvalidArgumentException;
 
 class BoolType extends Type implements SolidityTypeInterface
@@ -13,13 +14,13 @@ class BoolType extends Type implements SolidityTypeInterface
      *
      * @return string
      */
-    public function inputFormat()
+    public function inputFormat($value)
     {
-        if (!is_bool($this->value)) {
+        if (!is_bool($value)) {
             throw new InvalidArgumentException('The value to inputFormat function must be boolean.');
         }
 
-        return '000000000000000000000000000000000000000000000000000000000000000' . ((int)$this->value);
+        return Str::padLeft((int)$value, 63, '0');
     }
 
     /**

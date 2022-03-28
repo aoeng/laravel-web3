@@ -13,6 +13,7 @@ namespace Aoeng\Laravel\Web3;
 
 use Aoeng\Laravel\Web3\Types\AddressType;
 use Aoeng\Laravel\Web3\Types\BoolType;
+use Aoeng\Laravel\Web3\Types\BytesType;
 use Aoeng\Laravel\Web3\Types\IntegerType;
 use Aoeng\Laravel\Web3\Types\StringType;
 use Illuminate\Support\Str;
@@ -60,6 +61,7 @@ class Contract extends Web3
         'string'  => StringType::class,
         'address' => AddressType::class,
         'bool'    => BoolType::class,
+        'bytes'   => BytesType::class
     ];
 
     /**
@@ -246,12 +248,13 @@ class Contract extends Web3
         $this->function = $function;
 
         $data = $this->encode($params);
+
         $functionSignature = $this->encodeFunctionSignature($function);
 
         $transaction = [
             'nonce'    => $nonce ? Utils::toHex($nonce) : $this->getTransactionCount(),
             'gas'      => Utils::toHex($gas ?? $this->config['gas_limit']),
-            'gasPrice' => Utils::toHex($gasPrice ?? $this->config['gas_price']),
+            'gasPrice' => Utils::toHex($gasPrice ?? $this->config['gas_price'], 9),
             'from'     => $this->address,
             'to'       => $this->contractAddress,
             'chainId'  => $this->config['chain_id']
@@ -292,7 +295,10 @@ class Contract extends Web3
             throw new InvalidArgumentException('encodeParameters number of types must equal to number of params.');
         }
 
-        $encodeStr = '';
+
+        $length = 0;
+        $data = [];
+        $encodeData = [];
 
         foreach ($this->functions[$this->function]['inputs'] as $key => $input) {
             $className = $this->getTypeClassName($input['type']);
@@ -303,11 +309,29 @@ class Contract extends Web3
 
             $value = !empty($input['name']) && isset($params[$input['name']]) ? $params[$input['name']] : $params[$key];
 
-            $encodeStr .= (new $className($value))->encode();
+            $data[$key] = $row = (new $className($value, $input['type']))->encode();
+
+
+            if (!$row['dynamic']) {
+                $encodeData[$key] = $row['value'];
+                $length += $row['length'];
+            } else {
+                $encodeData[$key] = 0;
+                $length += 32;
+            }
         }
 
+        //动态数据
+        foreach ($data as $key => $item) {
+            if ($item['dynamic']) {
+                $encodeData[$key] = Utils::integerFormat($length);
 
-        return '0x' . $encodeStr;
+                $encodeData[] = $item['value'];
+                $length += $item['length'];
+            }
+        }
+
+        return '0x' . implode('', $encodeData);
     }
 
     public function decode(string $data)
