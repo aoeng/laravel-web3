@@ -36,6 +36,38 @@ class Eth extends Web3
         return $response;
     }
 
+    public function getEthPrice()
+    {
+        $response = $this->requestAPI('stats_ethprice');
+
+        if ($response instanceof \Exception) throw $response;
+
+        return $response;
+    }
+
+    public function getGasPrice()
+    {
+        $response = $this->requestAPI('gastracker_gasoracle');
+
+        if ($response instanceof \Exception) throw $response;
+
+        return $response;
+    }
+
+    public function getGasLimit()
+    {
+        $response = $this->requestAPI('stats_dailyavggaslimit', [
+            'startdate' => now()->subDays(7)->format('Y-m-d'),
+            'enddate'   => now()->format('Y-m-d'),
+            'sort'      => 'asc',
+        ]);
+
+        if ($response instanceof \Exception) throw $response;
+
+
+        return collect($response)->avg('gasLimit');
+    }
+
 
     public function getBalance($contract = null, $decimal = 18)
     {
